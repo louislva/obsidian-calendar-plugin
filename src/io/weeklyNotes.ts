@@ -18,7 +18,6 @@ export async function tryToCreateWeeklyNote(
   settings: ISettings,
   cb?: (file: TFile) => void
 ): Promise<void> {
-  const { workspace } = window.app;
   const { format } = getWeeklyNoteSettings();
   const filename = date.format(format);
 

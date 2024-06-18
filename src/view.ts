@@ -279,7 +279,6 @@ export default class CalendarView extends ItemView {
   }
 
   async openOrCreateDailyNote(date: Moment, inNewTab: boolean): Promise<void> {
-    const { workspace } = this.app;
     const existingFile = getDailyNote(date, get(dailyNotes));
     if (!existingFile) {
       // File doesn't exist

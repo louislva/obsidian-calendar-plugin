@@ -18,7 +18,6 @@ export async function tryToCreateDailyNote(
   settings: ISettings,
   cb?: (newFile: TFile) => void
 ): Promise<void> {
-  const { workspace } = window.app;
   const { format } = getDailyNoteSettings();
   const filename = date.format(format);
 
