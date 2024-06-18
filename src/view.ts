@@ -279,35 +279,32 @@ export default class CalendarView extends ItemView {
     await leaf.openFile(existingFile);
 
     activeFile.setFile(existingFile);
-    workspace.setActiveLeaf(leaf, true, true)
+    workspace.setActiveLeaf(leaf, true, true);
   }
 
-  async openOrCreateDailyNote(
-    date: Moment,
-    inNewSplit: boolean
-  ): Promise<void> {
+  async openOrCreateDailyNote(date: Moment, inNewTab: boolean): Promise<void> {
     const { workspace } = this.app;
     const existingFile = getDailyNote(date, get(dailyNotes));
     if (!existingFile) {
       // File doesn't exist
       tryToCreateDailyNote(
         date,
-        inNewSplit,
+        inNewTab,
         this.settings,
         (dailyNote: TFile) => {
           activeFile.setFile(dailyNote);
         }
       );
-      return;
+    } else {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const mode = (this.app.vault as any).getConfig("defaultViewMode");
+      const leaf = inNewTab
+        ? workspace.createLeafInTabGroup()
+        : workspace.getUnpinnedLeaf();
+      // if (inNewTab) workspace.setActiveLeaf(leaf);
+      await leaf.openFile(existingFile, { active: true, mode });
+
+      activeFile.setFile(existingFile);
     }
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const mode = (this.app.vault as any).getConfig("defaultViewMode");
-    const leaf = inNewSplit
-      ? workspace.splitActiveLeaf()
-      : workspace.getUnpinnedLeaf();
-    await leaf.openFile(existingFile, { active : true, mode });
-
-    activeFile.setFile(existingFile);
   }
 }
