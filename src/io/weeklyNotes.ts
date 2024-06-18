@@ -4,6 +4,7 @@ import {
   createWeeklyNote,
   getWeeklyNoteSettings,
 } from "obsidian-daily-notes-interface";
+import openLeaf from "../openLeaf";
 
 import type { ISettings } from "src/settings";
 import { createConfirmationDialog } from "src/ui/modal";
@@ -13,7 +14,7 @@ import { createConfirmationDialog } from "src/ui/modal";
  */
 export async function tryToCreateWeeklyNote(
   date: Moment,
-  inNewSplit: boolean,
+  inNewTab: boolean,
   settings: ISettings,
   cb?: (file: TFile) => void
 ): Promise<void> {
@@ -23,11 +24,9 @@ export async function tryToCreateWeeklyNote(
 
   const createFile = async () => {
     const dailyNote = await createWeeklyNote(date);
-    const leaf = inNewSplit
-      ? workspace.splitActiveLeaf()
-      : workspace.getUnpinnedLeaf();
+    const leaf = openLeaf(inNewTab);
 
-    await leaf.openFile(dailyNote, { active : true });
+    await leaf.openFile(dailyNote, { active: true });
     cb?.(dailyNote);
   };
 

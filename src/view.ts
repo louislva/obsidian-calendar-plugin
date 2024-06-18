@@ -256,10 +256,7 @@ export default class CalendarView extends ItemView {
     }
   }
 
-  async openOrCreateWeeklyNote(
-    date: Moment,
-    inNewSplit: boolean
-  ): Promise<void> {
+  async openOrCreateWeeklyNote(date: Moment, inNewTab: boolean): Promise<void> {
     const { workspace } = this.app;
 
     const startOfWeek = date.clone().startOf("week");
@@ -268,15 +265,13 @@ export default class CalendarView extends ItemView {
 
     if (!existingFile) {
       // File doesn't exist
-      tryToCreateWeeklyNote(startOfWeek, inNewSplit, this.settings, (file) => {
+      tryToCreateWeeklyNote(startOfWeek, inNewTab, this.settings, (file) => {
         activeFile.setFile(file);
       });
       return;
     }
 
-    const leaf = inNewSplit
-      ? workspace.splitActiveLeaf()
-      : workspace.getUnpinnedLeaf();
+    const leaf = openLeaf(inNewTab);
     await leaf.openFile(existingFile);
 
     activeFile.setFile(existingFile);
