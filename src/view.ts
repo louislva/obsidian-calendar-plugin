@@ -23,6 +23,7 @@ import {
   tasksSource,
   wordCountSource,
 } from "./ui/sources";
+import openLeaf from "./openLeaf";
 
 export default class CalendarView extends ItemView {
   private calendar: Calendar;
@@ -298,10 +299,7 @@ export default class CalendarView extends ItemView {
     } else {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const mode = (this.app.vault as any).getConfig("defaultViewMode");
-      const leaf = inNewTab
-        ? workspace.createLeafInTabGroup()
-        : workspace.getUnpinnedLeaf();
-      // if (inNewTab) workspace.setActiveLeaf(leaf);
+      const leaf = openLeaf(inNewTab);
       await leaf.openFile(existingFile, { active: true, mode });
 
       activeFile.setFile(existingFile);

@@ -4,6 +4,7 @@ import {
   createDailyNote,
   getDailyNoteSettings,
 } from "obsidian-daily-notes-interface";
+import openLeaf from "../openLeaf";
 
 import type { ISettings } from "src/settings";
 import { createConfirmationDialog } from "src/ui/modal";
@@ -23,10 +24,7 @@ export async function tryToCreateDailyNote(
 
   const createFile = async () => {
     const dailyNote = await createDailyNote(date);
-    const leaf = inNewTab
-      ? workspace.createLeafInTabGroup()
-      : workspace.getUnpinnedLeaf();
-    // if (inNewTab) workspace.setActiveLeaf(leaf);
+    const leaf = openLeaf(inNewTab);
     await leaf.openFile(dailyNote, { active: true });
     cb?.(dailyNote);
   };
